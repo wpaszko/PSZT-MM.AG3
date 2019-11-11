@@ -1,22 +1,28 @@
-from creators import RandomCreator
-from creatures import DeckCreature
-from crossovers import HalfCrossover
-from evaluators import SimpleDeckEvaluator
-from evolution import Evolution
-from mutations import random_one_swap_mutate
-from selects import select_half_best
+import creators
+import creatures
+import crossovers
+import evaluators
+import evolution
+import mutations
+import selects
 
 a = 1
 b = 1
-population_size = 100
-creature_class = DeckCreature
 
-evolution = Evolution(RandomCreator(creature_class),
-                      SimpleDeckEvaluator(a, b),
-                      select_half_best,
-                      HalfCrossover(creature_class),
-                      random_one_swap_mutate,
-                      population_size)
+creature_class = creatures.DeckCreature
+creator = creators.RandomCreator(creature_class)
+evaluator = evaluators.SimpleDeckEvaluator(a, b)
+select = selects.select_half_best
+crossover = crossovers.HalfCrossover(creature_class)
+mutation = mutations.random_one_swap_mutate
+population_size = 100
+
+evolution = evolution.Evolution(creator,
+                                evaluator,
+                                select,
+                                crossover,
+                                mutation,
+                                population_size)
 
 final_population = evolution.evolve_n_generations(100)
 
