@@ -58,3 +58,13 @@ class MultiPointCrossover:
         parts_b = list(itertools.chain.from_iterable(parts_b))
 
         return parts_a, parts_b
+
+
+class RandomMultiPointCrossover(MultiPointCrossover):
+    def __init__(self, creature_class, number_of_points):
+        self._number_of_points = number_of_points
+        super().__init__(creature_class, [])
+
+    def cross(self, creature_a, creature_b):
+        self._division_factors = sorted([random.random() for i in range(self._number_of_points)])
+        return super().cross(creature_a, creature_b)
