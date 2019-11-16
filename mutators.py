@@ -1,7 +1,7 @@
 import random
 
 
-class RandomSwapMutator:
+class RandomIndependentMutator:
     def __init__(self, creature_class, probability):
         self._creature_class = creature_class
         self._probability = probability

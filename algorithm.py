@@ -14,7 +14,7 @@ creator = creators.RandomCreator(creature_class)
 evaluator = evaluators.SimpleDeckEvaluator(a, b)
 select = selects.select_half_best
 crossover = crossovers.HalfCrossover(creature_class)
-mutator = mutators.RandomSwapMutator(creature_class, 0.01)
+mutator = mutators.RandomIndependentMutator(creature_class, 0.01)
 population_size = 100
 
 evolution = evolution.Evolution(creator,
