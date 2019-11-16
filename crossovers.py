@@ -68,3 +68,22 @@ class RandomMultiPointCrossover(MultiPointCrossover):
     def cross(self, creature_a, creature_b):
         self._division_factors = sorted([random.random() for i in range(self._number_of_points)])
         return super().cross(creature_a, creature_b)
+
+
+class RandomIndependentCrossover:
+    def __init__(self, creature_class):
+        self._creature_class = creature_class
+
+    def cross(self, creature_a, creature_b):
+        new_genome_a = []
+        new_genome_b = []
+
+        for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
+            if random.random() < 0.5:
+                locus_a, locus_b = locus_b, locus_a
+
+            new_genome_a.append(locus_a)
+            new_genome_b.append(locus_b)
+
+        return (self._creature_class(new_genome_a),
+                self._creature_class(new_genome_b))
