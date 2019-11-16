@@ -1,3 +1,6 @@
+import itertools
+
+
 class Evolution:
     def __init__(self, creator, evaluator, select, crossover, mutator, population_size):
         self._creator = creator
@@ -9,9 +12,11 @@ class Evolution:
 
     def evolve_n_generations(self, n, logger=None):
         for i in range(n):
-            fitnesses = [self._evaluator.evaluate(creature) for creature in self._population]
-            best = self._select(self._population, fitnesses)
-            children = [self._crossover.cross(a, b) for a, b in zip(best, best[1:] + best[:1])]
+            children = [self._crossover.cross(a, b) for a, b in zip(self._population, self._population[1:] + self._population[:1])]
+            children = list(itertools.chain.from_iterable(children))
             children = [self._mutator.mutate(child) for child in children]
+            tmp_population = self._population + children
+            fitnesses = [self._evaluator.evaluate(creature) for creature in tmp_population]
+            self._population = self._select(tmp_population, fitnesses, len(self._population))
 
         return self._population  # TODO: clean this mess up
