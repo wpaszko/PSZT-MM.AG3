@@ -8,7 +8,7 @@ class SinglePointCrossover:
         self._division_factor = division_factor
 
     def cross(self, creature_a, creature_b):
-        division_point = int(self._division_factor * creature_a.get_cards_length())
+        division_point = int(self._division_factor * creature_a.get_genome_length())
 
         first_parts = (creature_a.get_genome()[:division_point], creature_b.get_genome()[:division_point])
         second_parts = (creature_b.get_genome()[division_point:], creature_a.get_genome()[division_point:])
@@ -32,7 +32,7 @@ class MultiPointCrossover:
         self._division_factors = division_factors
 
     def cross(self, creature_a, creature_b):
-        division_points = self._make_division_points(creature_a.get_cards_length())
+        division_points = self._make_division_points(creature_a.get_genome_length())
         split_parts = self._split_into_parts(creature_a.get_genome(), creature_b.get_genome(), division_points)
 
         parts_a, parts_b = self._get_parts(split_parts)

@@ -11,5 +11,5 @@ class DeckCreature:
     def get_genome(self):
         return self._genome
 
-    def get_cards_length(self):
+    def get_genome_length(self):
         return len(self._genome)

@@ -19,7 +19,7 @@ class RandomIndependentSwapMutator:
 
     def mutate(self, creature):
         new_genome = list(creature.get_genome())
-        idx = range(creature.get_cards_length())
+        idx = range(creature.get_genome_length())
 
         for current_id in idx:
             if random.random() < self._probability:
