@@ -16,3 +16,10 @@ class SinglePointCrossover:
                 self._creature_class(first_parts[1] + second_parts[1]))
 
 
+class RandomSinglePointCrossover(SinglePointCrossover):
+    def __init__(self, creature_class):
+        super().__init__(creature_class, 0.0)
+
+    def cross(self, creature_a, creature_b):
+        self._division_factor = random.random()
+        return super().cross(creature_a, creature_b)
