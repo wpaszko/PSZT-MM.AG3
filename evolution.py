@@ -12,6 +12,8 @@ class Evolution:
         self._population = self._creator.create(population_size)
 
     def evolve_n_generations(self, n, logger=None):
+        self._log(logger)
+
         for i in range(n):
             children = self._make_children()  # make new population R from current population P
             tmp_population = self._population + children  # combine T = P + R
@@ -19,6 +21,8 @@ class Evolution:
             fitnesses = self._evaluate(tmp_population)  # evaluate T
             self._population = self._select(tmp_population, fitnesses,
                                             len(self._population))  # select from T and replace P
+
+            self._log(logger)
 
         return self._population  # TODO: clean this mess up
 
@@ -37,3 +41,7 @@ class Evolution:
 
     def _evaluate(self, population):
         return [self._evaluator.evaluate(creature) for creature in population]
+
+    def _log(self, logger):
+        if logger:
+            logger.log(self._evaluate(self._population))
