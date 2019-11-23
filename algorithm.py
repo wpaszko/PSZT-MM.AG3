@@ -16,19 +16,19 @@ creature_class = creatures.DeckCreature
 creator = creators.RandomCreator(creature_class, n)
 evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
 select = selects.select_n_best
-crossover = crossovers.SinglePointCrossover(creature_class, 0.5)
-mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.01)
+crossover = crossovers.RandomMultiPointCrossover(creature_class, 3)
+mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.5)
 population_size = 100
 
-evolution = evolution.Evolution(creator,
-                                evaluator,
-                                select,
-                                crossover,
-                                mutator,
-                                population_size)
+evol = evolution.Evolution(creator,
+                           evaluator,
+                           select,
+                           crossover,
+                           mutator,
+                           population_size)
 
-best = evolution.evolve_n_generations(100)
+best = evol.evolve_n_generations(100)
 
 print("Best creature:")
-print("A: ", best.get_stack(True))
-print("B: ", best.get_stack(False))
+print("A: ", best.get_stack(True), ", sum: ", evaluator.get_sum_on_stack(best, True))
+print("B: ", best.get_stack(False), ", product: ", evaluator.get_product_on_stack(best, False))
