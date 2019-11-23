@@ -20,7 +20,7 @@ class Evolution:
 
             fitnesses = self._evaluate(tmp_population)  # evaluate T
             self._population = self._selector.select(tmp_population, fitnesses,
-                                            len(self._population))  # select from T and replace P
+                                                     len(self._population))  # select from T and replace P
 
             self._log(logger)
 
@@ -47,4 +47,4 @@ class Evolution:
             logger.log(self._evaluate(self._population))
 
     def _get_best_creature(self):
-        return self._selector.select(self._population, self._evaluate(self._population), 1)[0]
+        return min(zip(self._population, self._evaluate(self._population)), key=lambda x: x[1])[0]
