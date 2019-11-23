@@ -24,7 +24,7 @@ class Evolution:
 
             self._log(logger)
 
-        return self._population  # TODO: clean this mess up
+        return self._get_best_creature()
 
     def _make_children(self):
         children = self._do_crossover()
@@ -45,3 +45,6 @@ class Evolution:
     def _log(self, logger):
         if logger:
             logger.log(self._evaluate(self._population))
+
+    def _get_best_creature(self):
+        return self._select(self._population, self._evaluate(self._population), 1)[0]
