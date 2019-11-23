@@ -13,7 +13,7 @@ b = sys.argv[2]
 
 creature_class = creatures.DeckCreature
 creator = creators.RandomCreator(creature_class)
-evaluator = evaluators.SimpleDeckEvaluator(a, b)
+evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
 select = selects.select_n_best
 crossover = crossovers.SinglePointCrossover(creature_class, 0.5)
 mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.01)
