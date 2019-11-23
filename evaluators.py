@@ -14,7 +14,7 @@ class DistanceSumDeckEvaluator:
         return product
 
     def evaluate(self, creature):
-        fitness_a = -abs(self._a - self.get_sum_on_stack(creature, True))
-        fitness_b = -abs(self._b - self.get_product_on_stack(creature, False))
+        fitness_a = abs(self._a - self.get_sum_on_stack(creature, True))
+        fitness_b = abs(self._b - self.get_product_on_stack(creature, False))
 
         return fitness_a+fitness_b
