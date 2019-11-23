@@ -2,11 +2,11 @@ import itertools
 
 
 class Evolution:
-    def __init__(self, creator, evaluator, select, crossover, mutator,
+    def __init__(self, creator, evaluator, selector, crossover, mutator,
                  population_size):  # pass configuration by constructor
         self._creator = creator
         self._evaluator = evaluator
-        self._select = select
+        self._selector = selector
         self._crossover = crossover
         self._mutator = mutator
         self._population = self._creator.create(population_size)
@@ -19,7 +19,7 @@ class Evolution:
             tmp_population = self._population + children  # combine T = P + R
 
             fitnesses = self._evaluate(tmp_population)  # evaluate T
-            self._population = self._select(tmp_population, fitnesses,
+            self._population = self._selector.select(tmp_population, fitnesses,
                                             len(self._population))  # select from T and replace P
 
             self._log(logger)
@@ -47,4 +47,4 @@ class Evolution:
             logger.log(self._evaluate(self._population))
 
     def _get_best_creature(self):
-        return self._select(self._population, self._evaluate(self._population), 1)[0]
+        return self._selector.select(self._population, self._evaluate(self._population), 1)[0]

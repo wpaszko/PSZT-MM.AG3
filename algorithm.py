@@ -15,14 +15,14 @@ n = int(sys.argv[3])
 creature_class = creatures.DeckCreature
 creator = creators.RandomCreator(creature_class, n)
 evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
-select = selects.select_n_best
+selector = selects.FromLowToHighFitnessesSelection()
 crossover = crossovers.RandomMultiPointCrossover(creature_class, 3)
 mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.5)
 population_size = 100
 
 evol = evolution.Evolution(creator,
                            evaluator,
-                           select,
+                           selector,
                            crossover,
                            mutator,
                            population_size)
