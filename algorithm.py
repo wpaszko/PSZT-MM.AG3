@@ -6,8 +6,10 @@ import evolution
 import mutators
 import selects
 
-a = 1
-b = 1
+import sys
+
+a = sys.argv[1]
+b = sys.argv[2]
 
 creature_class = creatures.DeckCreature
 creator = creators.RandomCreator(creature_class)
@@ -24,6 +26,8 @@ evolution = evolution.Evolution(creator,
                                 mutator,
                                 population_size)
 
-final_population = evolution.evolve_n_generations(100)
+best = evolution.evolve_n_generations(100)
 
-print(final_population)
+print("Best creature:")
+print("A: ", best.get_stack(True))
+print("B: ", best.get_stack(False))
