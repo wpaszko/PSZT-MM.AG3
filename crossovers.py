@@ -19,11 +19,12 @@ class SinglePointCrossover:
 
 
 class RandomSinglePointCrossover(SinglePointCrossover):
-    def __init__(self, creature_class):
+    def __init__(self, creature_class, rng=random.Random()):
         super().__init__(creature_class, 0.0)
+        self._rng = rng
 
     def cross(self, creature_a, creature_b):
-        self._division_factor = random.random()  # random division factor (so random division point)
+        self._division_factor = self._rng.random()  # random division factor (so random division point)
         return super().cross(creature_a, creature_b)
 
 
@@ -67,26 +68,28 @@ class MultiPointCrossover:
 
 
 class RandomMultiPointCrossover(MultiPointCrossover):
-    def __init__(self, creature_class, number_of_points):
+    def __init__(self, creature_class, number_of_points, rng=random.Random()):
         self._number_of_points = number_of_points
         super().__init__(creature_class, [])
+        self._rng = rng
 
     def cross(self, creature_a, creature_b):
         self._division_factors = sorted(
-            [random.random() for i in range(self._number_of_points)])  # random division factors
+            [self._rng.random() for i in range(self._number_of_points)])  # random division factors
         return super().cross(creature_a, creature_b)
 
 
 class RandomIndependentCrossover:
-    def __init__(self, creature_class):
+    def __init__(self, creature_class, rng=random.Random()):
         self._creature_class = creature_class
+        self._rng = rng
 
     def cross(self, creature_a, creature_b):
         new_genome_a = []
         new_genome_b = []
 
         for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
-            if random.random() < 0.5:  # for every locus flip a coin and swap if draw
+            if self._rng.random() < 0.5:  # for every locus flip a coin and swap if draw
                 locus_a, locus_b = locus_b, locus_a
 
             new_genome_a.append(locus_a)
@@ -97,15 +100,16 @@ class RandomIndependentCrossover:
 
 
 class RandomRespectfulCrossover:
-    def __init__(self, creature_class):
+    def __init__(self, creature_class, rng=random.Random()):
         self._creature_class = creature_class
+        self._rng = rng
 
     def cross(self, creature_a, creature_b):
         new_genome_a = []
         new_genome_b = []
 
         for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
-            if locus_a != locus_b and random.random() < 0.5:  # if loci are the same, don't change anything, otherwise pick random
+            if locus_a != locus_b and self._rng.random() < 0.5:  # if loci are the same, don't change anything, otherwise pick random
                 locus_a, locus_b = locus_b, locus_a
 
             new_genome_a.append(locus_a)
