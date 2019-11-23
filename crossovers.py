@@ -94,3 +94,22 @@ class RandomIndependentCrossover:
 
         return (self._creature_class(new_genome_a),
                 self._creature_class(new_genome_b))
+
+
+class RandomRespectfulCrossover:
+    def __init__(self, creature_class):
+        self._creature_class = creature_class
+
+    def cross(self, creature_a, creature_b):
+        new_genome_a = []
+        new_genome_b = []
+
+        for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
+            if locus_a != locus_b and random.random() < 0.5:  # if loci are the same, don't change anything, otherwise pick random
+                locus_a, locus_b = locus_b, locus_a
+
+            new_genome_a.append(locus_a)
+            new_genome_b.append(locus_b)
+
+        return (self._creature_class(new_genome_a),
+                self._creature_class(new_genome_b))
