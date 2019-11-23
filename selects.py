@@ -1,2 +1,3 @@
 def select_n_best(population, fitnesses, size):
-    return population[: size]  # TODO: return n of the creatures that have the best fitnesses
+    best = [x for _, x in sorted(zip(fitnesses, population), key=lambda x: x[0], reverse=True)]
+    return best[:size]
