@@ -8,11 +8,12 @@ import selects
 
 import sys
 
-a = sys.argv[1]
-b = sys.argv[2]
+a = int(sys.argv[1])
+b = int(sys.argv[2])
+n = int(sys.argv[3])
 
 creature_class = creatures.DeckCreature
-creator = creators.RandomCreator(creature_class)
+creator = creators.RandomCreator(creature_class, n)
 evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
 select = selects.select_n_best
 crossover = crossovers.SinglePointCrossover(creature_class, 0.5)
