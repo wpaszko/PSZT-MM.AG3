@@ -1,13 +1,13 @@
+import sys
+
 import creators
 import creatures
 import crossovers
 import evaluators
 import evolution
 import mutators
-import selects
 import satisfaction
-
-import sys
+import selects
 
 a = int(sys.argv[1])
 b = int(sys.argv[2])

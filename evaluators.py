@@ -21,11 +21,10 @@ class DistanceSumDeckEvaluator:
         fitness_a = abs(self._a - self.get_sum_on_stack(creature, True))
         fitness_b = abs(self._b - self.get_product_on_stack(creature, False))
 
-        return fitness_a+fitness_b
+        return fitness_a + fitness_b
 
     def get_sum_on_stack(self, creature, stack_value):
         return get_sum_of_list(creature.get_stack(stack_value))
 
     def get_product_on_stack(self, creature, stack_value):
         return get_product_of_list(creature.get_stack(stack_value))
-
