@@ -28,10 +28,9 @@ evol = evolution.Evolution(creator,
                            selector,
                            crossover,
                            mutator,
-                           satisfaction_evaluator,
                            population_size)
 
-best = evol.evolve_until_satisfied(s)
+best = evol.evolve_until_satisfied(satisfaction_evaluator, s)
 
 print("Best creature:")
 print("A: ", best.get_stack(True), ", sum: ", evaluators.get_sum_of_list(best.get_stack(True)))

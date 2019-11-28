@@ -2,14 +2,13 @@ import itertools
 
 
 class Evolution:
-    def __init__(self, creator, evaluator, selector, crossover, mutator, satisfaction_evaluator,
+    def __init__(self, creator, evaluator, selector, crossover, mutator,
                  population_size):  # pass configuration by constructor
         self._creator = creator
         self._evaluator = evaluator
         self._selector = selector
         self._crossover = crossover
         self._mutator = mutator
-        self._satisfaction_evaluator = satisfaction_evaluator
         self._population = self._creator.create(population_size)
 
     def evolve_n_generations(self, n, logger=None):
@@ -21,11 +20,11 @@ class Evolution:
 
         return self._get_best_creature()
 
-    def evolve_until_satisfied(self, satisfactory_level=1.0, logger=None, max_gen=1000):
+    def evolve_until_satisfied(self, satisfaction_evaluator, satisfactory_level=1.0, logger=None, max_gen=1000):
         self._log(logger)
 
         i = 0
-        while self._get_current_satisfaction_level() < satisfactory_level and i < max_gen:
+        while self._get_current_satisfaction_level(satisfaction_evaluator) < satisfactory_level and i < max_gen:
             self._population = self._make_new_generation()
             self._log(logger)
             i += 1
@@ -71,5 +70,5 @@ class Evolution:
     def _get_best(self):
         return min(zip(self._population, self._evaluate(self._population)), key=lambda x: x[1])
 
-    def _get_current_satisfaction_level(self):
-        return self._satisfaction_evaluator.evaluate(self._get_best_fitness())
+    def _get_current_satisfaction_level(self, satisfaction_evaluator):
+        return satisfaction_evaluator.evaluate(self._get_best_fitness())
