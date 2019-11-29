@@ -1,3 +1,6 @@
+import math
+
+
 def get_sum_of_list(l):
     return sum(l)
 
@@ -20,8 +23,24 @@ class DistanceSumDeckEvaluator:
     def evaluate(self, creature):
         fitness_a = abs(self._a - self.get_sum_on_stack(creature, True))
         fitness_b = abs(self._b - self.get_product_on_stack(creature, False))
-
         return fitness_a + fitness_b
+
+    def get_sum_on_stack(self, creature, stack_value):
+        return get_sum_of_list(creature.get_stack(stack_value))
+
+    def get_product_on_stack(self, creature, stack_value):
+        return get_product_of_list(creature.get_stack(stack_value))
+
+
+class NormalizedMeanDeckEvaluator:
+    def __init__(self, a, b):
+        self._a = a
+        self._b = b
+
+    def evaluate(self, creature):
+        fitness_a = math.sqrt(abs(self._a - self.get_sum_on_stack(creature, True)))
+        fitness_b = math.log10(1 + abs(self._b - self.get_product_on_stack(creature, False)))
+        return (fitness_a + fitness_b) / 2
 
     def get_sum_on_stack(self, creature, stack_value):
         return get_sum_of_list(creature.get_stack(stack_value))
