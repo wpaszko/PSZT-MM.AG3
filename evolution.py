@@ -15,16 +15,31 @@ class Evolution:
         self._log(logger)
 
         for i in range(n):
-            children = self._make_children()  # make new population R from current population P
-            tmp_population = self._population + children  # combine T = P + R
-
-            fitnesses = self._evaluate(tmp_population)  # evaluate T
-            self._population = self._selector.select(tmp_population, fitnesses,
-                                                     len(self._population))  # select from T and replace P
-
+            self._population = self._make_new_generation()
             self._log(logger)
 
         return self._get_best_creature()
+
+    def evolve_until_satisfied(self, satisfaction_evaluator, satisfactory_level=1.0, logger=None, max_gen=1000):
+        self._log(logger)
+
+        i = 0
+        while self._get_current_satisfaction_level(satisfaction_evaluator) < satisfactory_level and i < max_gen:
+            self._population = self._make_new_generation()
+            self._log(logger)
+            i += 1
+
+        return self._get_best_creature()
+
+    def _make_new_generation(self):
+        children = self._make_children()  # make new population R from current population P
+        tmp_population = self._population + children  # combine T = P + R
+
+        fitnesses = self._evaluate(tmp_population)  # evaluate T
+        new_population = self._selector.select(tmp_population, fitnesses,
+                                               len(self._population))  # select from T and replace P
+
+        return new_population
 
     def _make_children(self):
         children = self._do_crossover()
@@ -47,4 +62,13 @@ class Evolution:
             logger.log(self._evaluate(self._population))
 
     def _get_best_creature(self):
-        return min(zip(self._population, self._evaluate(self._population)), key=lambda x: x[1])[0]
+        return self._get_best()[0]
+
+    def _get_best_fitness(self):
+        return self._get_best()[1]
+
+    def _get_best(self):
+        return min(zip(self._population, self._evaluate(self._population)), key=lambda x: x[1])
+
+    def _get_current_satisfaction_level(self, satisfaction_evaluator):
+        return satisfaction_evaluator.evaluate(self._get_best_fitness())

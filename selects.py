@@ -1,6 +1,6 @@
 import random
-import numpy as np
 
+import numpy as np
 
 
 class FromTheLowestFitnessesSelection:
@@ -24,19 +24,18 @@ class SwapRandomSelection:
         right_half = best[half_index:]
         for current_id, x in enumerate(left_half):
             if self._rng.random() < self._probability:
-                id = self._rng.randint(half_index, len(best)-1)
+                id = self._rng.randint(half_index, len(best) - 1)
                 best[current_id], best[id] = best[id], best[current_id]
         return best[:size]
 
 
 class TanhSelection:
     def __init__(self, n):
-        n = 3*n
+        n = 3 * n
         indices = range(n)
         lnn = np.log(n)
-        self._p = [0.5*(1 - np.tanh(((2 * lnn * i) / n) - lnn)) for i in indices]
+        self._p = [0.5 * (1 - np.tanh(((2 * lnn * i) / n) - lnn)) for i in indices]
         self._p = self._p / sum(self._p)
-
 
     def select(self, population, fitnesses, size):
         best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]

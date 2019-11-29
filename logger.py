@@ -1,4 +1,5 @@
 import statistics
+
 import matplotlib.pyplot as plt
 
 
@@ -26,17 +27,17 @@ class Logger:
         if not end_gen or end_gen > self.current_gen:
             end_gen = self.current_gen
 
-        x = range(start_gen, end_gen+1)
+        x = range(start_gen, end_gen + 1)
 
         fig, axs = plt.subplots(2, 2, sharex='all', sharey='all', figsize=figsize, dpi=dpi)
         fig.suptitle("Statistics of fitness in each generation:")
-        axs[0, 0].plot(x, self.means[start_gen:end_gen+1])
+        axs[0, 0].plot(x, self.means[start_gen:end_gen + 1])
         axs[0, 0].set_title("Mean")
-        axs[0, 1].plot(x, self.medians[start_gen:end_gen+1])
+        axs[0, 1].plot(x, self.medians[start_gen:end_gen + 1])
         axs[0, 1].set_title("Median")
-        axs[1, 0].plot(x, self.highests[start_gen:end_gen+1])
+        axs[1, 0].plot(x, self.highests[start_gen:end_gen + 1])
         axs[1, 0].set_title("Highest")
-        axs[1, 1].plot(x, self.lowests[start_gen:end_gen+1])
+        axs[1, 1].plot(x, self.lowests[start_gen:end_gen + 1])
         axs[1, 1].set_title("Lowest")
         fig.tight_layout(rect=[0, 0.03, 1, 0.9])
         plt.show()
@@ -62,11 +63,11 @@ class Logger:
         self._plot_single_data(self.lowests, "Lowest fitness in each generation:", figsize, dpi, start_gen, end_gen)
 
     def _plot_single_data(self, data, title, figsize, dpi, start_gen, end_gen):
-        x = range(start_gen, end_gen+1)
+        x = range(start_gen, end_gen + 1)
 
         plt.figure(figsize=figsize, dpi=dpi)
         plt.title(title)
-        plt.plot(x, data[start_gen:end_gen+1])
+        plt.plot(x, data[start_gen:end_gen + 1])
         plt.show()
 
     def clear(self):

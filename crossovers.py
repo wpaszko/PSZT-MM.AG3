@@ -9,10 +9,10 @@ class SinglePointCrossover:
 
     def cross(self, creature_a, creature_b):
         division_point = int(
-            self._division_factor * creature_a.get_genome_length())  # find a point based on given factor
+            self._division_factor * creature_a.get_genotype_length())  # find a point based on given factor
 
-        first_parts = (creature_a.get_genome()[:division_point], creature_b.get_genome()[:division_point])
-        second_parts = (creature_b.get_genome()[division_point:], creature_a.get_genome()[division_point:])
+        first_parts = (creature_a.get_genotype()[:division_point], creature_b.get_genotype()[:division_point])
+        second_parts = (creature_b.get_genotype()[division_point:], creature_a.get_genotype()[division_point:])
 
         return (self._creature_class(first_parts[0] + second_parts[0]),
                 self._creature_class(first_parts[1] + second_parts[1]))
@@ -35,8 +35,8 @@ class MultiPointCrossover:
 
     def cross(self, creature_a, creature_b):
         division_points = self._make_division_points(
-            creature_a.get_genome_length())  # find multiple division points based on division factors
-        split_parts = self._split_into_parts(creature_a.get_genome(), creature_b.get_genome(),
+            creature_a.get_genotype_length())  # find multiple division points based on division factors
+        split_parts = self._split_into_parts(creature_a.get_genotype(), creature_b.get_genotype(),
                                              division_points)  # list of tuples with parts
 
         parts_a, parts_b = self._get_parts(split_parts)  # convert list of tuples into two lists
@@ -50,11 +50,11 @@ class MultiPointCrossover:
         division_points.append(cards_length + 1)  # from last division point till the end (index is out of bounds)
         return division_points
 
-    def _split_into_parts(self, genome_a, genome_b, division_points):
-        parts = [(genome_a[start:end], genome_b[start:end])
+    def _split_into_parts(self, genotype_a, genotype_b, division_points):
+        parts = [(genotype_a[start:end], genotype_b[start:end])
                  for start, end in zip(division_points[:-1], division_points[1:])]  # for pairs of division points
         parts = [reversed(parts[i]) if i % 2 else parts[i]
-                 for i in range(len(parts))]  # reverse every odd tuple (to alternate between genomes)
+                 for i in range(len(parts))]  # reverse every odd tuple (to alternate between genotypes)
         return parts
 
     def _get_parts(self, splitted_parts):
@@ -85,18 +85,18 @@ class RandomIndependentCrossover:
         self._rng = rng
 
     def cross(self, creature_a, creature_b):
-        new_genome_a = []
-        new_genome_b = []
+        new_genotype_a = []
+        new_genotype_b = []
 
-        for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
-            if self._rng.random() < 0.5:  # for every locus flip a coin and swap if draw
-                locus_a, locus_b = locus_b, locus_a
+        for gene_a, gene_b in zip(creature_a.get_genotype(), creature_b.get_genotype()):
+            if self._rng.random() < 0.5:  # for every gene flip a coin and swap if draw
+                gene_a, gene_b = gene_b, gene_a
 
-            new_genome_a.append(locus_a)
-            new_genome_b.append(locus_b)
+            new_genotype_a.append(gene_a)
+            new_genotype_b.append(gene_b)
 
-        return (self._creature_class(new_genome_a),
-                self._creature_class(new_genome_b))
+        return (self._creature_class(new_genotype_a),
+                self._creature_class(new_genotype_b))
 
 
 class RandomRespectfulCrossover:
@@ -105,15 +105,15 @@ class RandomRespectfulCrossover:
         self._rng = rng
 
     def cross(self, creature_a, creature_b):
-        new_genome_a = []
-        new_genome_b = []
+        new_genotype_a = []
+        new_genotype_b = []
 
-        for locus_a, locus_b in zip(creature_a.get_genome(), creature_b.get_genome()):
-            if locus_a != locus_b and self._rng.random() < 0.5:  # if loci are the same, don't change anything, otherwise pick random
-                locus_a, locus_b = locus_b, locus_a
+        for gene_a, gene_b in zip(creature_a.get_genotype(), creature_b.get_genotype()):
+            if gene_a != gene_b and self._rng.random() < 0.5:  # if genes are the same, don't change anything, otherwise pick random
+                gene_a, gene_b = gene_b, gene_a
 
-            new_genome_a.append(locus_a)
-            new_genome_b.append(locus_b)
+            new_genotype_a.append(gene_a)
+            new_genotype_b.append(gene_b)
 
-        return (self._creature_class(new_genome_a),
-                self._creature_class(new_genome_b))
+        return (self._creature_class(new_genotype_a),
+                self._creature_class(new_genotype_b))
