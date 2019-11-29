@@ -34,7 +34,7 @@ class TanhSelection:
         n = 3*n
         indices = range(n)
         lnn = np.log(n)
-        self._p = [0.5*(1 - np.tanh(( (2 * lnn * i) / n ) - lnn)) for i in indices]
+        self._p = [0.5*(1 - np.tanh(((2 * lnn * i) / n) - lnn)) for i in indices]
         self._p = self._p / sum(self._p)
 
 
@@ -42,5 +42,21 @@ class TanhSelection:
         best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
         best_selected = []
         for i in np.random.choice(len(best), size, replace=False, p=self._p):
+            best_selected.append(best[i])
+        return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
+
+class ExponentialSelection:
+    def select(self, population, fitnesses, size):
+        best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
+        fitness_std = np.std(fitnesses)
+        fitness_mean = np.mean(fitnesses)
+        selective_pressure = 1
+        fitnesses = sorted(fitnesses)
+        p = [ np.exp( -i ) for i in fitnesses]
+        print(fitnesses)
+        print(p)
+        p /= sum(p)
+        best_selected = []
+        for i in np.random.choice(len(best), size, replace=False, p=p):
             best_selected.append(best[i])
         return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
