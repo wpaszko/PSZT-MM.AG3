@@ -1,6 +1,9 @@
 import random
+import sys
 
 import numpy as np
+
+EPSILON = sys.float_info.epsilon
 
 
 class FromTheLowestFitnessesSelection:
@@ -59,7 +62,12 @@ class ExponentialSelection:
         fitness_std = np.std(fitnesses)
         fitness_mean = np.mean(fitnesses)
         fitnesses = [i for i, _ in best]
-        p = [np.exp(-self._selective_pressure * (i - fitness_mean) / fitness_std) for i in fitnesses]
+
+        if fitness_std > EPSILON:
+            p = [np.exp(-self._selective_pressure * (i - fitness_mean) / fitness_std) for i in fitnesses]
+        else:
+            p = np.full(len(fitnesses), 1.0)
+
         p /= sum(p)
 
         best_selected = []
