@@ -30,15 +30,15 @@ class SwapRandomSelection:
 
 
 class TanhSelection:
-    def __init__(self, n):
-        n = 3 * n
-        indices = range(n)
-        lnn = np.log(n)
-        self._p = [0.5 * (1 - np.tanh(((2 * lnn * i) / n) - lnn)) for i in indices]
-        self._p = self._p / sum(self._p)
-
     def select(self, population, fitnesses, size):
         best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
+
+        fitness_mean = np.mean(fitnesses)
+        ln = np.log(fitness_mean)
+        fitnesses = [i for i, _ in best]
+        self._p = [0.5 * (1 - np.tanh(((2 * ln * i) / fitness_mean) - ln)) for i in fitnesses]
+        self._p = self._p / sum(self._p)
+
         best_selected = []
         for i in np.random.choice(len(best), size, replace=False, p=self._p):
             best_selected.append(best[i])
