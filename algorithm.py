@@ -10,9 +10,10 @@ import satisfaction
 import selects
 
 DEF_POPULATION_SIZE = 100
+DEF_SATISFACTION_LEVEL = 1.0
 
 
-def perform(n, a, b, s=1.0, population_size=DEF_POPULATION_SIZE):
+def perform(n, a, b, s=DEF_SATISFACTION_LEVEL, population_size=DEF_POPULATION_SIZE):
     creature_class = creatures.DeckCreature
     creator = creators.RandomCreator(creature_class, n)
     evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument("N", type=int, help="number of cards")
     parser.add_argument("A", type=int, help="goal of first stack")
     parser.add_argument("B", type=int, help="goal of second stack")
-    parser.add_argument("s", type=float, help="satisfaction level (0.0 - 1.0)")
+    parser.add_argument("-s", type=float, default=DEF_SATISFACTION_LEVEL, help="satisfaction level (0.0 - 1.0)")
     parser.add_argument("-p", type=int, default=DEF_POPULATION_SIZE, help="population size")
     args = parse_args(parser)
 
