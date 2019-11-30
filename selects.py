@@ -30,33 +30,39 @@ class SwapRandomSelection:
 
 
 class TanhSelection:
+    def __init__(self, np_rng=np.random.RandomState()):
+        self._np_rng = np_rng
+
     def select(self, population, fitnesses, size):
         best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
 
         fitness_mean = np.mean(fitnesses)
         ln = np.log(fitness_mean)
         fitnesses = [i for i, _ in best]
-        self._p = [0.5 * (1 - np.tanh(((2 * ln * i) / fitness_mean) - ln)) for i in fitnesses]
-        self._p = self._p / sum(self._p)
+        p = [0.5 * (1 - np.tanh(((2 * ln * i) / fitness_mean) - ln)) for i in fitnesses]
+        p /= sum(p)
 
         best_selected = []
-        for i in np.random.choice(len(best), size, replace=False, p=self._p):
+        for i in self._np_rng.choice(len(best), size, replace=False, p=p):
             best_selected.append(best[i])
         return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
 
 
 class ExponentialSelection:
-    def __init__(self, selective_pressure):
+    def __init__(self, selective_pressure, np_rng=np.random.RandomState()):
         self._selective_pressure = selective_pressure
+        self._np_rng = np_rng
 
     def select(self, population, fitnesses, size):
         best = [(y, x) for y, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
+
         fitness_std = np.std(fitnesses)
         fitness_mean = np.mean(fitnesses)
         fitnesses = [i for i, _ in best]
         p = [np.exp(-self._selective_pressure * (i - fitness_mean) / fitness_std) for i in fitnesses]
         p /= sum(p)
+
         best_selected = []
-        for i in np.random.choice(len(best), size, replace=False, p=p):
+        for i in self._np_rng.choice(len(best), size, replace=False, p=p):
             best_selected.append(best[i])
         return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
