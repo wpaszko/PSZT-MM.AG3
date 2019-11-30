@@ -13,14 +13,16 @@ class Logger:
         self.medians = []
         self.highests = []
         self.lowests = []
+        self.matchings = []
         self.current_gen = -1
 
-    def log(self, fitnesses):
+    def log(self, fitnesses, matching):
         sorted_fitnesses = sorted(fitnesses)
         self.means.append(statistics.mean(sorted_fitnesses))
         self.medians.append(statistics.median(sorted_fitnesses))
         self.highests.append(sorted_fitnesses[-1])
         self.lowests.append(sorted_fitnesses[0])
+        self.matchings.append(matching)
         self.current_gen = self.current_gen + 1
 
     def plot(self, start_gen=0, end_gen=None, figsize=(DEF_PLOT_WIDTH, DEF_PLOT_HEIGHT), dpi=DEF_PLOT_DPI):
@@ -62,6 +64,11 @@ class Logger:
             end_gen = self.current_gen
         self._plot_single_data(self.lowests, "Lowest fitness in each generation:", figsize, dpi, start_gen, end_gen)
 
+    def plot_matching(self, start_gen=0, end_gen=None, figsize=(DEF_PLOT_WIDTH, DEF_PLOT_HEIGHT), dpi=DEF_PLOT_DPI):
+        if not end_gen or end_gen > self.current_gen:
+            end_gen = self.current_gen
+        self._plot_single_data(self.matchings, "Matching in each generation:", figsize, dpi, start_gen, end_gen)
+
     def _plot_single_data(self, data, title, figsize, dpi, start_gen, end_gen):
         x = range(start_gen, end_gen + 1)
 
@@ -75,4 +82,5 @@ class Logger:
         self.medians = []
         self.highests = []
         self.lowests = []
+        self.matchings = []
         self.current_gen = -1

@@ -20,11 +20,11 @@ class Evolution:
 
         return self._get_best_creature()
 
-    def evolve_until_satisfied(self, satisfaction_evaluator, satisfactory_level=1.0, logger=None, max_gen=1000):
+    def evolve_until_satisfied(self, satisfactory_matching=1.0, logger=None, max_gen=1000):
         self._log(logger)
 
         i = 0
-        while self._get_current_satisfaction_level(satisfaction_evaluator) < satisfactory_level and i < max_gen:
+        while self._get_current_matching() < satisfactory_matching and i < max_gen:
             self._population = self._make_new_generation()
             self._log(logger)
             i += 1
@@ -59,7 +59,7 @@ class Evolution:
 
     def _log(self, logger):
         if logger:
-            logger.log(self._evaluate(self._population))
+            logger.log(self._evaluate(self._population), self._get_current_matching())
 
     def _get_best_creature(self):
         return self._get_best()[0]
@@ -70,5 +70,5 @@ class Evolution:
     def _get_best(self):
         return min(zip(self._population, self._evaluate(self._population)), key=lambda x: x[1])
 
-    def _get_current_satisfaction_level(self, satisfaction_evaluator):
-        return satisfaction_evaluator.evaluate(self._get_best_fitness())
+    def _get_current_matching(self):
+        return self._evaluator.evaluate_matching(self._get_best_fitness())
