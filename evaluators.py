@@ -1,4 +1,5 @@
 import math
+
 import numpy as np
 
 
@@ -55,6 +56,24 @@ class NormalizedMeanDeckEvaluator:
     def evaluate(self, creature):
         fitness_a = math.sqrt(abs(self._a - get_sum_on_stack(creature, True)))
         fitness_b = math.log10(1 + abs(self._b - get_product_on_stack(creature, False)))
+
+        return (fitness_a + fitness_b) / 2
+
+    def evaluate_matching(self, fitness):
+        return get_exponential_matching(fitness, self.MATCH_REF_POINT)
+
+
+class LogarithmicMeanDeckEvaluator:
+    MATCH_REF_POINT = 2.0
+
+    def __init__(self, a, b):
+        self._a = a
+        self._b = b
+
+    def evaluate(self, creature):
+        fitness_a = math.log10(1 + abs(self._a - get_sum_on_stack(creature, True)))
+        fitness_b = abs(math.log10(get_product_on_stack(creature, False) / self._b))
+
         return (fitness_a + fitness_b) / 2
 
     def evaluate_matching(self, fitness):
