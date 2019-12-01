@@ -1,6 +1,9 @@
 import math
+import sys
 
 import numpy as np
+
+EPSILON = sys.float_info.epsilon
 
 
 def get_sum_of_list(l):
@@ -34,7 +37,10 @@ class BaseEvaluator:
     def __init__(self, a, b):
         self._a = a
         self._b = b
-        self._match_ref_point = self._evaluate_fitness(1.1 * a, a, 2 * b, b)
+        if a == 0 and b == 0:
+            self._match_ref_point = EPSILON
+        else:
+            self._match_ref_point = self._evaluate_fitness(1.1 * a, a, 2 * b, b)
 
     def evaluate(self, creature):
         return self._evaluate_fitness(get_sum_on_stack(creature, True),

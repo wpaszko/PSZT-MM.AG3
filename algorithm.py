@@ -8,17 +8,17 @@ import evolution
 import mutators
 import selects
 
-DEF_POPULATION_SIZE = 100
+DEF_POPULATION_SIZE = 1000
 DEF_SATISFACTORY_MATCHING = 1.0
 
 
 def perform(n, a, b, s=DEF_SATISFACTORY_MATCHING, population_size=DEF_POPULATION_SIZE):
     creature_class = creatures.DeckCreature
     creator = creators.RandomCreator(creature_class, n)
-    evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
-    selector = selects.FromTheLowestFitnessesSelection()
-    crossover = crossovers.RandomMultiPointCrossover(creature_class, 3)
-    mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.5)
+    evaluator = evaluators.LogarithmicMeanDeckEvaluator(a, b)
+    selector = selects.ExponentialSelection(1.0)
+    crossover = crossovers.RandomIndependentCrossover(creature_class)
+    mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.05)
 
     evol = evolution.Evolution(creator,
                                evaluator,
@@ -44,6 +44,8 @@ if __name__ == '__main__':
             parser.error("A can't be negative")
         if not args.B >= 0:
             parser.error("B can't be negative")
+        if args.A == 0 and args.B == 0:
+            parser.error("At least one goal has to be more than 0")
         if not (0.0 <= args.s <= 1.0):
             parser.error("Satisfactory matching level has to be between 0.0 and 1.0")
         if not args.p >= 2:
