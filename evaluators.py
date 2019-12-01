@@ -43,15 +43,13 @@ class BaseEvaluator:
                                       self._b)
 
     def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
-        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
-        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
-        return fitness_a + fitness_b
+        raise NotImplementedError("Please Implement this method")
 
     def _evaluate_fitness_a(self, creature_score, goal):
-        return abs(goal - creature_score)
+        raise NotImplementedError("Please Implement this method")
 
     def _evaluate_fitness_b(self, creature_score, goal):
-        return abs(goal - creature_score)
+        raise NotImplementedError("Please Implement this method")
 
     def evaluate_matching(self, fitness):
         return get_exponential_matching(fitness, self._match_ref_point)
@@ -61,9 +59,9 @@ class DistanceSumDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
         super().__init__(a, b)
 
-    def evaluate(self, creature):
-        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
-        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
+    def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
+        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
+        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
         return fitness_a + fitness_b
 
     def _evaluate_fitness_a(self, creature_score, goal):
@@ -77,9 +75,9 @@ class NormalizedDistanceSumDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
         super().__init__(a, b)
 
-    def evaluate(self, creature):
-        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
-        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
+    def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
+        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
+        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
         return fitness_a + fitness_b
 
     def _evaluate_fitness_a(self, creature_score, goal):
@@ -103,10 +101,9 @@ class NormalizedMeanDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
         super().__init__(a, b)
 
-    def evaluate(self, creature):
-        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
-        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
-
+    def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
+        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
+        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
         return (fitness_a + fitness_b) / 2
 
     def _evaluate_fitness_a(self, creature_score, goal):
@@ -120,10 +117,9 @@ class LogarithmicMeanDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
         super().__init__(a, b)
 
-    def evaluate(self, creature):
-        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
-        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
-
+    def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
+        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
+        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
         return (fitness_a + fitness_b) / 2
 
     def _evaluate_fitness_a(self, creature_score, goal):
