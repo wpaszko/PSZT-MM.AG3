@@ -27,54 +27,118 @@ def get_product_on_stack(creature, stack_value):
 
 def get_exponential_matching(x, ref_point):
     return np.exp(
-        - (x ** 2) / (2 * ref_point ** 2))  # fitness equal to ref_point is 60% satisfactory
+        - x / (2 * ref_point))  # fitness equal to ref_point is 60% satisfactory
 
 
-class DistanceSumDeckEvaluator:
-    MATCH_REF_POINT = 1000
-
+class BaseEvaluator:
     def __init__(self, a, b):
         self._a = a
         self._b = b
+        self._match_ref_point = self._evaluate_fitness(1.1 * a, a, 2 * b, b)
 
     def evaluate(self, creature):
-        fitness_a = abs(self._a - get_sum_on_stack(creature, True))
-        fitness_b = abs(self._b - get_product_on_stack(creature, False))
+        return self._evaluate_fitness(get_sum_on_stack(creature, True),
+                                      self._a,
+                                      get_product_on_stack(creature, False),
+                                      self._b)
+
+    def _evaluate_fitness(self, score_a, goal_a, score_b, goal_b):
+        fitness_a = self._evaluate_fitness_a(score_a, goal_a)
+        fitness_b = self._evaluate_fitness_b(score_b, goal_b)
         return fitness_a + fitness_b
 
+    def _evaluate_fitness_a(self, creature_score, goal):
+        return abs(goal - creature_score)
+
+    def _evaluate_fitness_b(self, creature_score, goal):
+        return abs(goal - creature_score)
+
     def evaluate_matching(self, fitness):
-        return get_exponential_matching(fitness, self.MATCH_REF_POINT)
+        return get_exponential_matching(fitness, self._match_ref_point)
 
 
-class NormalizedMeanDeckEvaluator:
-    MATCH_REF_POINT = 2.0
-
+class DistanceSumDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
-        self._a = a
-        self._b = b
+        super().__init__(a, b)
 
     def evaluate(self, creature):
-        fitness_a = math.sqrt(abs(self._a - get_sum_on_stack(creature, True)))
-        fitness_b = math.log10(1 + abs(self._b - get_product_on_stack(creature, False)))
+        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
+        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
+        return fitness_a + fitness_b
+
+    def _evaluate_fitness_a(self, creature_score, goal):
+        return abs(goal - creature_score)
+
+    def _evaluate_fitness_b(self, creature_score, goal):
+        return abs(goal - creature_score)
+
+
+class NormalizedDistanceSumDeckEvaluator(BaseEvaluator):
+    def __init__(self, a, b):
+        super().__init__(a, b)
+
+    def evaluate(self, creature):
+        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
+        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
+        return fitness_a + fitness_b
+
+    def _evaluate_fitness_a(self, creature_score, goal):
+        if goal == 0:
+            fitness = creature_score
+        else:
+            fitness = abs(goal - creature_score) / goal
+
+        return fitness
+
+    def _evaluate_fitness_b(self, creature_score, goal):
+        if goal == 0:
+            fitness = creature_score
+        else:
+            fitness = abs(goal - creature_score) / goal
+
+        return fitness
+
+
+class NormalizedMeanDeckEvaluator(BaseEvaluator):
+    def __init__(self, a, b):
+        super().__init__(a, b)
+
+    def evaluate(self, creature):
+        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
+        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
 
         return (fitness_a + fitness_b) / 2
 
-    def evaluate_matching(self, fitness):
-        return get_exponential_matching(fitness, self.MATCH_REF_POINT)
+    def _evaluate_fitness_a(self, creature_score, goal):
+        return math.sqrt(abs(goal - creature_score))
+
+    def _evaluate_fitness_b(self, creature_score, goal):
+        return math.log10(1 + abs(goal - creature_score))
 
 
-class LogarithmicMeanDeckEvaluator:
-    MATCH_REF_POINT = 2.0
-
+class LogarithmicMeanDeckEvaluator(BaseEvaluator):
     def __init__(self, a, b):
-        self._a = a
-        self._b = b
+        super().__init__(a, b)
 
     def evaluate(self, creature):
-        fitness_a = math.log10(1 + abs(self._a - get_sum_on_stack(creature, True)))
-        fitness_b = abs(math.log10(get_product_on_stack(creature, False) / self._b))
+        fitness_a = self._evaluate_fitness_a(get_sum_on_stack(creature, True), self._a)
+        fitness_b = self._evaluate_fitness_b(get_product_on_stack(creature, False), self._b)
 
         return (fitness_a + fitness_b) / 2
 
-    def evaluate_matching(self, fitness):
-        return get_exponential_matching(fitness, self.MATCH_REF_POINT)
+    def _evaluate_fitness_a(self, creature_score, goal):
+        return math.log10(1 + abs(goal - creature_score))
+
+    def _evaluate_fitness_b(self, creature_score, goal):
+        if goal == 0:
+            if creature_score == 0:
+                fitness = 0
+            else:
+                fitness = creature_score
+        else:
+            if creature_score == 0:
+                fitness = abs(math.log10(0.5 / goal))
+            else:
+                fitness = abs(math.log10(creature_score / goal))
+
+        return fitness
