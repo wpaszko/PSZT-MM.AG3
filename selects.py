@@ -43,10 +43,13 @@ class TanhSelection:
         ln = np.log(fitness_mean)
         fitnesses = [i for i, _ in best]
         p = [0.5 * (1 - np.tanh(((2 * ln * i) / fitness_mean) - ln)) for i in fitnesses]
+
+        p[0] = 0.0
+
         p /= sum(p)
 
-        best_selected = []
-        for i in self._np_rng.choice(len(best), size, replace=False, p=p):
+        best_selected = [best[0]]
+        for i in self._np_rng.choice(len(best), size-1, replace=False, p=p):
             best_selected.append(best[i])
         return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
 
@@ -68,9 +71,11 @@ class ExponentialSelection:
         else:
             p = np.full(len(fitnesses), 1.0)
 
+        p[0] = 0.0
+
         p /= sum(p)
 
-        best_selected = []
-        for i in self._np_rng.choice(len(best), size, replace=False, p=p):
+        best_selected = [best[0]]
+        for i in self._np_rng.choice(len(best), size-1, replace=False, p=p):
             best_selected.append(best[i])
         return [x for _, x in sorted(best_selected, key=lambda x: x[0])]
