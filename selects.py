@@ -16,12 +16,12 @@ import numpy as np
 EPSILON = sys.float_info.epsilon
 
 
-class FromTheLowestFitnessesSelection:
+class ConsecutiveSelection:
     """
-    From The Lowest Fitnesses Selection
+    Consecutive Selection
 
     Most basic selector. Picks consecutive best creatures.
-    So it sorts creatures based on fitnesses and picks size of them from left.
+    It sorts creatures based on fitnesses and picks size of them from left.
     """
 
     def select(self, population, fitnesses, size):
@@ -31,9 +31,9 @@ class FromTheLowestFitnessesSelection:
 
 class SwapRandomSelection:
     """
-    From The Lowest Fitnesses Selection
+    Swap Random Selection
 
-    Sorts creatures based on fitnesses, randomly swap some of them and picks size of them from left.
+    Sorts creatures based on fitnesses, randomly swaps some of them and picks size of them from left.
     """
 
     def __init__(self, probability, rng=random.Random()):
@@ -57,7 +57,7 @@ class SwapRandomSelection:
 
 class TanhSelection:
     """
-    From The Lowest Fitnesses Selection
+    Tanh Selection
 
     Picks creature based on probability.
     Probability is proportional to hyperbolic tangent scaled so that:
