@@ -1,9 +1,21 @@
+"""Module that stores Logger class"""
+
 import statistics
 
 import matplotlib.pyplot as plt
 
 
 class Logger:
+    """
+    Logger
+
+    Useful utility to collect statistics of evolution and display them
+
+    Usage example:
+    ... logger.log(fitnesses, matching) ...
+    logger.plot()
+    """
+
     DEF_PLOT_WIDTH = 6
     DEF_PLOT_HEIGHT = 6
     DEF_PLOT_DPI = 144

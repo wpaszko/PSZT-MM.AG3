@@ -1,4 +1,27 @@
+"""
+Module with creatures classes for genetic algorithm
+
+Creature is defined by its genotype passed to the constructor
+
+Creature is intended to be immutable
+"""
+
+
 class DeckCreature:
+    """
+    Deck Creature
+
+    Represents placements of cards on stacks
+
+    The genotype is a list of values.
+    If elements on index i has a value v, it means that card i+1 is on stack represented by v
+
+    Example:
+    genotype[4] = True
+
+    Card 5 is on stack represented by True
+    """
+
     def __init__(self, genotype):
         self._genotype = genotype
 

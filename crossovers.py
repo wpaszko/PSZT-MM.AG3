@@ -1,8 +1,27 @@
+"""
+Module with crossover classes for genetic algorithm
+
+Each crossover takes two creatures and makes two children with genotypes related to parents'
+
+Usage example:
+children = crossover.cross(creature1, creature2)
+"""
+
 import itertools
 import random
 
 
 class SinglePointCrossover:
+    """
+    Single Point Crossover
+
+    xxxx|yyyy + yyyy|xxxx = xxxxxxxx
+
+    Crossover that for given crossover point takes left part from first parent and right part from second parent
+
+    Crossover point is the same every time, given in the constructor
+    """
+
     def __init__(self, creature_class, division_factor):
         self._creature_class = creature_class
         self._division_factor = division_factor
@@ -19,6 +38,14 @@ class SinglePointCrossover:
 
 
 class RandomSinglePointCrossover(SinglePointCrossover):
+    """
+    Random Single Point Crossover
+
+    xxxx|yyyy + yyyy|xxxx = xxxxxxxx
+
+    Same as SinglePointCrossover, but crossover point is randomly chosen each time
+    """
+
     def __init__(self, creature_class, rng=random.Random()):
         super().__init__(creature_class, 0.0)
         self._rng = rng
@@ -29,6 +56,16 @@ class RandomSinglePointCrossover(SinglePointCrossover):
 
 
 class MultiPointCrossover:
+    """
+    Multi Point Crossover
+
+    xxx|xyy|yy + yyy|yxx|xx = xxxyxxyy
+
+    Crossover that for given crossover points takes first part from first parent, second part from second parent, third part from first parent, and so on...
+
+    Crossover points are the same every time, given in the constructor
+    """
+
     def __init__(self, creature_class, division_factors):
         self._creature_class = creature_class
         self._division_factors = division_factors
@@ -68,6 +105,14 @@ class MultiPointCrossover:
 
 
 class RandomMultiPointCrossover(MultiPointCrossover):
+    """
+    Random Multi Point Crossover
+
+    xxx|xyy|yy + yyy|yxx|xx = xxxyxxyy
+
+    Same as MultiPointCrossover but crossover points are randomly chosen each time
+    """
+
     def __init__(self, creature_class, number_of_points, rng=random.Random()):
         self._number_of_points = number_of_points
         super().__init__(creature_class, [])
@@ -80,6 +125,16 @@ class RandomMultiPointCrossover(MultiPointCrossover):
 
 
 class RandomIndependentCrossover:
+    """
+    Multi Point Crossover
+
+    xxxxyyyy + yyyyxxxx = ...
+
+    Crossover that for each locus takes the gene from randomly chosen parent
+
+    Worth noting that equal genes are always passed
+    """
+
     def __init__(self, creature_class, rng=random.Random()):
         self._creature_class = creature_class
         self._rng = rng
@@ -90,26 +145,6 @@ class RandomIndependentCrossover:
 
         for gene_a, gene_b in zip(creature_a.get_genotype(), creature_b.get_genotype()):
             if self._rng.random() < 0.5:  # for every gene flip a coin and swap if draw
-                gene_a, gene_b = gene_b, gene_a
-
-            new_genotype_a.append(gene_a)
-            new_genotype_b.append(gene_b)
-
-        return (self._creature_class(new_genotype_a),
-                self._creature_class(new_genotype_b))
-
-
-class RandomRespectfulCrossover:
-    def __init__(self, creature_class, rng=random.Random()):
-        self._creature_class = creature_class
-        self._rng = rng
-
-    def cross(self, creature_a, creature_b):
-        new_genotype_a = []
-        new_genotype_b = []
-
-        for gene_a, gene_b in zip(creature_a.get_genotype(), creature_b.get_genotype()):
-            if gene_a != gene_b and self._rng.random() < 0.5:  # if genes are the same, don't change anything, otherwise pick random
                 gene_a, gene_b = gene_b, gene_a
 
             new_genotype_a.append(gene_a)

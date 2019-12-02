@@ -1,7 +1,22 @@
+"""
+Module with mutation classes for genetic algorithm
+
+Mutator takes a creature and return new creature with mutated genotype
+
+Usage example:
+mutated_creature = mutator.mutate(creature)
+"""
+
 import random
 
 
 class RandomIndependentSwitchMutator:
+    """
+    Random Independent Switch Mutator
+
+    Loops through every gene, flips a coin and negate the gene if draw
+    """
+
     def __init__(self, creature_class, probability, rng=random.Random()):
         self._creature_class = creature_class
         self._probability = probability
@@ -14,6 +29,12 @@ class RandomIndependentSwitchMutator:
 
 
 class RandomIndependentSwapMutator:
+    """
+    Random Independent Swap Mutator
+
+    Loops through every gene, flips a coin and swaps the gene with other randomly chosen gene if draw
+    """
+
     def __init__(self, creature_class, probability, rng=random.Random()):
         self._creature_class = creature_class
         self._probability = probability
