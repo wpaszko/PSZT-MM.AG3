@@ -13,7 +13,7 @@ class DeckCreature:
 
     Represents placements of cards on stacks
 
-    The genotype is a list of values.
+    The genotype is a list of True/False values.
     If elements on index i has a value v, it means that card i+1 is on stack represented by v
 
     Example:
