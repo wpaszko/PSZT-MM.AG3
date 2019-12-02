@@ -6,7 +6,7 @@ import numpy as np
 EPSILON = sys.float_info.epsilon
 
 
-class FromTheLowestFitnessesSelection:
+class ConsecutiveSelection:
     def select(self, population, fitnesses, size):
         best = [x for _, x in sorted(zip(fitnesses, population), key=lambda x: x[0])]
         return best[:size]

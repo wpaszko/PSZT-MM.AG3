@@ -16,7 +16,7 @@ def perform(n, a, b, s=DEF_SATISFACTORY_MATCHING, population_size=DEF_POPULATION
     creature_class = creatures.DeckCreature
     creator = creators.RandomCreator(creature_class, n)
     evaluator = evaluators.DistanceSumDeckEvaluator(a, b)
-    selector = selects.FromTheLowestFitnessesSelection()
+    selector = selects.ConsecutiveSelection()
     crossover = crossovers.RandomMultiPointCrossover(creature_class, 3)
     mutator = mutators.RandomIndependentSwitchMutator(creature_class, 0.5)
 
