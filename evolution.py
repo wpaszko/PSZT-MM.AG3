@@ -1,7 +1,25 @@
+"""Module that stores Evolution class"""
+
 import itertools
 
 
 class Evolution:
+    """
+    Evolution
+
+    Main evolution logic
+
+    On start of every generation there is a start population P
+    Create new population R with crossing consecutive creatures (0 with 1, 1 with 2, 2 with 3, ...) and mutating children
+    Evaluate P+R and pick new population P from them
+
+    Has two modes:
+    1. Evolving specified number of generations (evolve_n_generations)
+    2. Evolving until matching is sufficient or maximum generations hit (evolve_until_satisfied)
+
+    Returns best creature in final population
+    """
+
     def __init__(self, creator, evaluator, selector, crossover, mutator,
                  population_size):  # pass configuration by constructor
         self._creator = creator

@@ -61,7 +61,8 @@ if __name__ == '__main__':
     parser.add_argument("N", type=int, help="number of cards")
     parser.add_argument("A", type=int, help="goal of first stack")
     parser.add_argument("B", type=int, help="goal of second stack")
-    parser.add_argument("-s", type=float, default=DEF_SATISFACTORY_MATCHING, help="satisfactory matching level (0.0 - 1.0)")
+    parser.add_argument("-s", type=float, default=DEF_SATISFACTORY_MATCHING,
+                        help="satisfactory matching level (0.0 - 1.0)")
     parser.add_argument("-p", type=int, default=DEF_POPULATION_SIZE, help="population size")
     args = parse_args(parser)
 
